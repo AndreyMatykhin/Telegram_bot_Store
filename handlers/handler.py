@@ -6,8 +6,11 @@ from markup.markup import Keyboards
 
 class Handler(metaclass=abc.ABCMeta):
     def __init__(self, bot):
+        # получаем объект бота
         self.bot = bot
-        self.keyboard = Keyboards()
+        # инициализируем разметку кнопок
+        self.keyboards = Keyboards()
+        # инициализируем менеджер для работы с БД
         self.DB = DBManager()
 
     @abc.abstractmethod
