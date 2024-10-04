@@ -1,3 +1,12 @@
+from os import path
+
+from models.product import Products
+from settings import config
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from data_base.dbcore import Base
+
+
 class Singleton(type):
     def __init__(cls, name, bases, attrs, **kwargs):
         super().__init__(name, bases, attrs)
@@ -10,5 +19,27 @@ class Singleton(type):
 
 
 class DBManager(metaclass=Singleton):
+    """
+    Класс-менеджер для работы с БД
+    """
+
     def __init__(self):
-        pass
+        """
+        Инициализация сесии и подключения к БД
+        """
+        self.engine = create_engine(config.DATABASE)
+        session = sessionmaker(bind=self.engine)
+        self.session = session()
+        if not path.isfile(config.DATABASE):
+            Base.metadata.create_all(self.engine)
+
+    def select_all_product(self, category):
+        """
+        Возвращает все все товары категории
+        """
+        result = self.session.query(Products).filter_by(category_id=category).all()
+        return result
+
+    def close(self):
+        """Закрывает сессию"""
+        self.session.close()
