@@ -61,7 +61,43 @@ settings = """
     AUTHOR,
     KEYBOARD['COPY'],
 )
+# ответ пользователю при добавлении товара в заказ
+product_order = """
+Выбранный товар:
+
+{}
+{}
+Cтоимость: {} руб
+
+добавлен в заказ!!!
+
+На складе осталось {} ед. 
+"""
+order_number = """
+
+<b>Позиция в заказе № </b> <i>{}</i>
+
+"""
+# ответ пользователю при посещении блока с заказом
+order = """
+
+<i>Название:</i> <b>{}</b>
+
+<i>Описание:</i> <b>{}</b>
+
+<i>Cтоимость:</i> <b>{} руб за 1 ед.</b>
+
+<i>Количество позиций:</i> <b>{} ед.</b> 
+"""
+# ответ пользователю, когда заказа нет
+no_orders = """
+<b>Заказ отсутствует !!!</b>
+"""
 MESSAGES = {
     'trading store': trading_store,
-    'settings': settings
+    'settings': settings,
+    'product_order': product_order,
+    'order_number': order_number,
+    'order': order,
+    'no_orders': no_orders
 }
