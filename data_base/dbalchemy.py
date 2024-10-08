@@ -31,7 +31,7 @@ class DBManager(metaclass=Singleton):
 
     def __init__(self):
         """
-        Инициализация сесии и подключения к БД
+        Инициализация сессии и подключения к БД
         """
         self.engine = create_engine(config.DATABASE)
         session = sessionmaker(bind=self.engine)
@@ -137,3 +137,8 @@ class DBManager(metaclass=Singleton):
         result = self._session.query(Order).count()
         self.close()
         return result
+    def delete_order(self, product_id):
+        """ Удаляет данные указанной строки заказа """
+        self._session.query(Order).filter_by(product_id=product_id).delete()
+        self._session.commit()
+        self.close()
