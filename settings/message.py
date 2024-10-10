@@ -93,11 +93,24 @@ order = """
 no_orders = """
 <b>Заказ отсутствует !!!</b>
 """
+# ответ пользователю при подтверждении оформления заказа
+applay = """
+<b>Ваш заказ оформлен !!!</b>
+
+<i>Общая стоимость заказа составляет:</i> <b>{} руб</b>
+
+<i>Общее количество позиций составляет:</i> <b>{} ед.</b>
+
+<b>ЗАКАЗ НАПРАВЛЕН НА СКЛАД,
+ДЛЯ ЕГО КОМПЛЕКТОВКИ !!!</b>
+"""
+# словарь ответов пользователю
 MESSAGES = {
     'trading store': trading_store,
     'settings': settings,
     'product_order': product_order,
     'order_number': order_number,
     'order': order,
-    'no_orders': no_orders
+    'no_orders': no_orders,
+    'applay': applay
 }

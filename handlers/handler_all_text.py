@@ -117,6 +117,12 @@ class HandlerAllText(Handler):
                 self.pressed_btn_back_step(message)
             if message.text == config.KEYBOARD['NEXT_STEP']:
                 self.pressed_btn_next_step(message)
+            if message.text == config.KEYBOARD['APPLAY']:
+                self.pressed_btn_apllay(message)
+            # иные нажатия и ввод данных пользователем
+            else:
+                self.bot.send_message(message.chat.id,
+                                      message.text)
 
     def pressed_btn_order(self, message):
         """ Обрабатывает входящие текстовые сообщения от нажатия на кнопку 'Заказ'. """
@@ -227,10 +233,21 @@ class HandlerAllText(Handler):
         """ Обрабатывает нажатие кнопки перемещения на следующую позицию товара в заказе """
         # увеличиваем шаг пока шаг не будет равет количеству строк
         # уменьшаем шаг пока шаг не будет равет "0"
-        if self.step < self.DB.count_row_order()-1:
+        if self.step < self.DB.count_row_order() - 1:
             self.step += 1
         count = self.DB.select_all_product_id()
         # получаем количество конкретного товара в соответствие с шагом выборки
         quantity = self.DB.select_order_quantity(count[self.step])
         # отправляем ответ пользователю
         self.send_message_order(count[self.step], quantity, message)
+
+    def pressed_btn_apllay(self, message):
+        """ Обрабатывает входящие текстовые сообщения от нажатия на кнопку 'Оформить заказ'. """
+        # отправляем ответ пользователю
+        self.bot.send_message(message.chat.id,
+                              MESSAGES['applay'].format(
+                                  self.DB.get_total_coast(),
+                                  self.DB.get_total_quantity()),
+                              parse_mode='HTML',
+                              reply_markup=self.keyboards.category_menu())
+        self.DB.delete_all_order()

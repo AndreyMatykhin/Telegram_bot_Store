@@ -18,7 +18,7 @@ class TelBot:
 
     def run_bot(self):
         self.start()
-        self.bot.polling(non_stop=True)
+        self.bot.infinity_polling()
 
 
 if __name__ == '__main__':
