@@ -137,8 +137,48 @@ class DBManager(metaclass=Singleton):
         result = self._session.query(Order).count()
         self.close()
         return result
+
     def delete_order(self, product_id):
         """ Удаляет данные указанной строки заказа """
         self._session.query(Order).filter_by(product_id=product_id).delete()
         self._session.commit()
         self.close()
+
+    def get_total_coast(self):
+        """ Возвращает общую стоимость товара """
+        # получаем список все product_id заказа
+        all_product_id = self.select_all_product_id()
+        # получаем список стоимость по всем позициям заказа в виде обычного списка
+        all_price = [self.select_single_product_price(itm) for itm in all_product_id]
+        # получаем список количества по всем позициям заказа в виде обычного списка
+        all_quantity = [self.select_order_quantity(itm) for itm in all_product_id]
+        # Считает общую сумму заказа и возвращает результат
+
+        # order_total_coast = 0
+        # for i, one_price in  enumerate(all_price):
+        #    order_total_coast+=all_quantity[i]*one_price
+
+        order_total_coast = sum([x * y for x, y in zip(all_price, all_quantity)])
+        return order_total_coast
+
+    def get_total_quantity(self):
+        """ Возвращает общее количество заказанной единицы товара """
+        # получаем список все product_id заказа
+        all_product_id = self.select_all_product_id()
+        # получаем список количества по всем позициям заказа в виде обычного списка
+        all_quantity = [self.select_order_quantity(itm) for itm in all_product_id]
+        return sum(all_quantity)
+
+    def delete_all_order(self):
+        """ Удаляет данные всего заказа """
+        all_id_order = self.select_all_order_id()
+        for itm in all_id_order:
+            self._session.query(Order).filter_by(id=itm).delete()
+            self._session.commit()
+        self.close()
+
+    def select_all_order_id(self):
+        """ Возвращает все id заказа """
+        result = self._session.query(Order.id).all()
+        self.close()
+        return _convert(result)
